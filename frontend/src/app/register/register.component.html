@@ -4,30 +4,50 @@
     <div class="form-floating">
         <input formControlName="firstname" type="text" class="form-control" placeholder="First Name">
         <label for="floatingPassword">First Name</label>
+        <span class="error" *ngIf="firstname?.invalid && firstname?.touched">Firstname is required</span>
+
     </div>
 
     <div class="form-floating">
         <input formControlName="lastname" type="text" class="form-control" placeholder="Last Name">
         <label for="floatingPassword">Last Name</label>
-    </div>
+        <span class="error" *ngIf="lastname?.invalid && lastname?.touched">Lastname is required</span>
 
+    </div>
     <div class="form-floating">
         <input formControlName="email" email="true" class="form-control" placeholder="Emaul">
         <label for="floatingPassword">Email</label>
+        <span class="error" *ngIf="email?.invalid && email?.touched">Email is required</span>
+
     </div>
     <div class="form-floating">
         <input formControlName="phone" type="text" class="form-control" placeholder="Phone">
         <label for="floatingPassword">Phone</label>
-    </div>
+        <span class="error" *ngIf="phone?.invalid && phone?.touched">Enter a valid phone number</span>
 
+    </div>
+    <br><br>
+    <select class="custom-select" formControlName="communicationMethod">
+        <option value="">How would you like to recieve updates?</option>
+        <option>Phone</option>
+        <option>Email</option>
+        <option>Web</option>
+        <option>WhatsApp</option>
+
+    </select>
+    <span class="error" *ngIf="communicationMethod?.invalid && communicationMethod?.touched">How would you like to
+        recieve updates?</span>
+    <br><br>
     <div class="form-floating">
         <input formControlName="password" type="password" class="form-control" placeholder="Password">
         <label for="floatingPassword">Password</label>
     </div>
+    <span class="error" *ngIf="password?.invalid && password?.touched">Password is required and Minimum length is
+        4</span>
 
 
     <br />
 
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
 
 </form>

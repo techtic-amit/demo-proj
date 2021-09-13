@@ -11,7 +11,7 @@ export class CustomerController {
     @Get('all')
     @ApiOkResponse({ description: 'Successfully authenticated' })
     @ApiBadRequestResponse({ description: 'Bad Request' })
-    async getAllTitle(@Request() request: any, @Res() res: Response): Promise<any> {
+    async getAllCustomer(@Request() request: any, @Res() res: Response): Promise<any> {
         return await this.CustomerService.getAll(request.query)
             .then(async output => {
                 return res.status(HttpStatus.OK).json({
@@ -23,7 +23,67 @@ export class CustomerController {
                 throw new UnprocessableEntityException(error);
             });
     }
+    @Get('getMakeData')
+    @ApiOkResponse({ description: 'Successfully authenticated' })
+    @ApiBadRequestResponse({ description: 'Bad Request' })
+    async getMakeData(@Request() request: any, @Res() res: Response): Promise<any> {
+        return await this.CustomerService.getDropDownDataMake(request.query)
+            .then(async output => {
+                return res.status(HttpStatus.OK).json({
+                    status: HttpStatus.OK,
+                    data: output,
+                });
+            })
+            .catch((error: any) => {
+                throw new UnprocessableEntityException(error);
+            });
+    }
+    @Get('getStateData')
+    @ApiOkResponse({ description: 'Successfully authenticated' })
+    @ApiBadRequestResponse({ description: 'Bad Request' })
+    async getStateData(@Request() request: any, @Res() res: Response): Promise<any> {
+        return await this.CustomerService.getDropDownDataState(request.query)
+            .then(async output => {
+                return res.status(HttpStatus.OK).json({
+                    status: HttpStatus.OK,
+                    data: output,
+                });
+            })
+            .catch((error: any) => {
+                throw new UnprocessableEntityException(error);
+            });
+    }
+    @Get('getCityData/:state_id')
+    @ApiOkResponse({ description: 'Successfully authenticated' })
+    @ApiBadRequestResponse({ description: 'Bad Request' })
+    async getCityData(@Request() request: any, @Param('state_id') id, @Res() res: Response): Promise<any> {
+        return await this.CustomerService.getDropDownCity(request.query, id)
+            .then(async output => {
+                return res.status(HttpStatus.OK).json({
+                    status: HttpStatus.OK,
+                    data: output,
+                });
+            })
+            .catch((error: any) => {
+                throw new UnprocessableEntityException(error);
+            });
+    }
 
+    @Get('getModelData')
+    @ApiOkResponse({ description: 'Successfully authenticated' })
+    @ApiBadRequestResponse({ description: 'Bad Request' })
+    async getModelData(@Request() request: any, @Res() res: Response): Promise<any> {
+        return await this.CustomerService.getDropDownDataModel(request.query)
+            .then(async output => {
+                return res.status(HttpStatus.OK).json({
+                    status: HttpStatus.OK,
+                    data: output,
+                });
+            })
+            .catch((error: any) => {
+                throw new UnprocessableEntityException(error);
+            });
+    }
     @Post('update-customer')
     @ApiOkResponse({ description: 'Successfully authenticated' })
     @ApiBadRequestResponse({ description: 'Bad Request' })
@@ -101,8 +161,64 @@ export class CustomerController {
             message: "Successfully logged out"
         }
     }
-    @Delete(':id/delete')
+    @Delete('delete/:id')
     async delete(@Param('id') id): Promise<any> {
         return this.CustomerService.delete(id);
     }
+    @Post('insert-service/:id')
+    @ApiOkResponse({ description: 'Successfully authenticated' })
+    @ApiBadRequestResponse({ description: 'Bad Request' })
+    async insertService(
+
+        @Request() request: any,
+        @Param('id') id,
+        @Body() body: any,
+
+        @Res() res: Response,
+    ): Promise<any> {
+        let type = body.type ? body.type : null;
+        console.log(body);
+        return await this.CustomerService
+            .insertService(body, type, id)
+            .then(async reasons => {
+                return res.status(HttpStatus.OK).json({
+                    status: HttpStatus.OK,
+                    data: reasons,
+                });
+            })
+            .catch((error: any) => {
+                throw new UnprocessableEntityException(error);
+            });
+
+
+    }
+
+
+    @Post('insert-vehicle')
+    @ApiOkResponse({ description: 'Successfully authenticated' })
+    @ApiBadRequestResponse({ description: 'Bad Request' })
+    async insertVehicle(
+
+        @Request() request: any,
+        @Body() body: any,
+
+        @Res() res: Response,
+    ): Promise<any> {
+        let type = body.type ? body.type : null;
+
+        return await this.CustomerService
+            .insertVehicleDetails(body, type)
+            .then(async reasons => {
+                return res.status(HttpStatus.OK).json({
+                    status: HttpStatus.OK,
+                    data: reasons,
+                });
+            })
+            .catch((error: any) => {
+                throw new UnprocessableEntityException(error);
+            });
+
+
+    }
+
 }

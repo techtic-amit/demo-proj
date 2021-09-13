@@ -1,0 +1,98 @@
+<div fxLayout="row" fxLayoutAlign=" center">
+
+    <div class="mat">
+        <mat-accordion *ngFor="let item of vehivleData; index as i">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{item.vin}}
+                    </mat-panel-title>
+                    <!-- <mat-panel-description>
+                        This is a summary of the content
+                    </mat-panel-description> -->
+                </mat-expansion-panel-header>
+                <p>Mileage : {{item.mileage}}</p>
+
+                <p>Make Year : {{item.makeYear.year}} </p>
+
+                <p>Model Name. : {{item.modelName.model}} </p>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    <form [formGroup]="form">
+        <h1 class="h3 mb-3 fw-normal">Add your Vehicle</h1>
+
+        <div class="form-floating">
+            <input formControlName="vin" type="text" class="form-control">
+            <label for="floatingPassword">Vin</label>
+            <span class="error" *ngIf="vin?.invalid ">Enter 4 digit number</span>
+        </div>
+        <br>
+        <div class="form-floating">
+            <input formControlName="mileage" type="text" class="form-control">
+            <label for="floatingPassword">Mileage </label>
+            <span class="error" *ngIf="mileage?.invalid && mileage?.touched">Mileage is required and should be
+                numerical</span>
+        </div>
+        <br>
+
+        <select class="custom-select" (change)="changeMake($event)" formControlName="makeYear">
+            <option value="" disabled>Select Make Year</option>
+            <option *ngFor="let make of MakeYear" [ngValue]="make">{{make.year}}</option>
+
+        </select>
+        <span class="error" *ngIf="makeYear?.invalid && makeYear?.touched">Select Make Year</span>
+
+        <br><br>
+
+        <select class="custom-select" (change)="changeModel($event)" formControlName="modelName">
+            <option value="" disabled>Select Model</option>
+            <option *ngFor="let model of ModelName" [ngValue]="model">{{model.model}}</option>
+        </select>
+        <span class="error" *ngIf="modelName?.invalid && modelName?.touched">Select Model</span>
+        <br><br>
+        <button class="w-100 btn btn-lg btn-primary" (click)="AddForm()" type="button">Add More..</button><br /><br>
+        <button class="w-100 btn btn-lg btn-primary" type="button" (click)="submit()">Add Vehicle</button>
+
+
+
+        <!-- <table>
+            <thead>
+                <tr>
+                    <th scope="col">Vin</th>
+                    <th scope="col">Milenge</th>
+                    <th scope="col">Model Name</th>
+                    <th scope="col">Make Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of vehivleData; index as i">
+
+                    <td>{{ item.vin }}</td>
+                    <td>{{ item.mileage }}</td>
+                    <td>{{ item.modelName.model }}</td>
+                    <td>{{ item.makeYear.year }}</td>
+
+
+                </tr>
+            </tbody>
+        </table> -->
+
+        <!-- <div formArrayName="formArr">
+        <button class="w-100 btn btn-lg btn-primary" (click)="AddForm()" type="button">Add Service Details</button>
+        <div class="form-group" *ngFor="let item of formArr; let i=index">
+            
+    <div class="form-floating">
+        <input formControlName="nickname" type="text" class="form-control">
+        <label for="floatingPassword">Nickname</label>
+    </div>
+    
+    <div class="form-floating">
+        <input formControlName="nickname" type="text" class="form-control">
+        <label for="floatingPassword">address</label>
+    </div>
+
+        </div>
+    </div> -->
+    </form>
+</div>

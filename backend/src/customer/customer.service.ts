@@ -6,7 +6,14 @@ import { Brackets } from "typeorm";
 import { Customer } from '../entities/customer.entity';
 import { Pagination } from '../class'
 import { JwtService } from '@nestjs/jwt';
+import { ServiceDetail } from '../entities/ServiceDetails.entity';
+import { getConnection } from "typeorm";
+import { Make } from 'src/entities/make.entity';
+import { Model } from 'src/entities/model.entity';
+import { VehicleDetail } from 'src/entities/vehicleDetails.entity';
+import { City } from 'src/entities/city.entity';
 import * as request from 'supertest';
+import { State } from '../entities/state.entity';
 var CryptoJS = require("crypto-js");
 
 @Injectable()
@@ -14,7 +21,20 @@ export class CustomerService {
     constructor(
         private jwtService: JwtService,
         @InjectRepository(Customer)
-        private customerRepository: Repository<Customer>
+        private customerRepository: Repository<Customer>,
+        @InjectRepository(ServiceDetail)
+        private serviceRepository: Repository<ServiceDetail>,
+        @InjectRepository(Make)
+        private makeeRepository: Repository<Make>,
+        @InjectRepository(Model)
+        private modelRepository: Repository<Model>,
+        @InjectRepository(VehicleDetail)
+        private vehicleRepository: Repository<VehicleDetail>,
+        @InjectRepository(City)
+        private cityRepository: Repository<City>,
+        @InjectRepository(State)
+        private stateRepository: Repository<State>,
+
     ) { }
 
     async create(payload, type = null): Promise<any> {
@@ -60,8 +80,8 @@ export class CustomerService {
                     if (payload.phone) {
                         customer.phone = payload.phone;
                     }
-                    if (payload.communication_method) {
-                        customer.communication_method = payload.communication_method;
+                    if (payload.communicationMethod) {
+                        customer.communication_method = payload.communicationMethod;
                     }
                     if (payload.vehicles_details) {
                         customer.vehicles_details = payload.vehicles_details;
@@ -96,6 +116,122 @@ export class CustomerService {
                 } else {
                     return (await res);
                 }
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+    async getDropDownDataMake(request: any) {
+        const data = this.makeeRepository.find();
+        return data;
+    }
+    async getDropDownDataState(request: any) {
+        const data = this.stateRepository.find();
+        return data;
+    }
+
+    async getDropDownDataModel(request: any) {
+        const data = this.modelRepository.find();
+        return data;
+    }
+    async getDropDownCity(request: any, stateId) {
+        const data = this.cityRepository.find({ state_id: stateId });
+        return data;
+    }
+    async insertService(payload, type = null, customerId): Promise<any> {
+        try {
+
+            let service = new ServiceDetail();
+            //if not exist
+
+            if (payload.nickname) {
+                service.nickname = payload.nickname;
+            }
+            if (payload.address1) {
+                service.address1 = payload.address1;
+            }
+            if (payload.address2) {
+                service.address2 = payload.address2;
+            }
+            if (payload.cityName.name) {
+                service.city = payload.cityName.name;
+            }
+            if (payload.stateName.name) {
+                service.state = payload.stateName.name;
+            }
+
+            if (payload.date) {
+                service.date = payload.date;
+            }
+
+            if (payload.ven) {
+                service.venue = payload.ven;
+            }
+
+            if (payload.zip) {
+                service.zip = payload.zip;
+            }
+
+            if (customerId) {
+                service.customer_id = customerId;
+            }
+
+
+
+
+            if (payload.id) {
+                await this.serviceRepository.update(payload.id, service);
+                return {
+                    status: true,
+                    msg: 'service details updated successfully.'
+                };
+            } else {
+
+                await this.serviceRepository.save(service);
+                return {
+                    status: true,
+                    msg: 'service details added successfully.'
+                };
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async insertVehicleDetails(payload, type = null): Promise<any> {
+        try {
+
+            let service = new VehicleDetail();
+            //if not exist
+
+            if (payload.vin) {
+                service.vin = payload.vin;
+            }
+            if (payload.makeYear.id) {
+                service.make_id = payload.makeYear.id;
+            }
+            if (payload.modelName.id) {
+                service.model_id = payload.modelName.id;
+            }
+            if (payload.mileage) {
+                service.mileage = payload.mileage;
+            }
+
+
+
+            if (payload.id) {
+                await this.vehicleRepository.update(payload.id, service);
+                return {
+                    status: true,
+                    msg: 'Vehicle details updated successfully.'
+                };
+            } else {
+
+                await this.vehicleRepository.save(service);
+                return {
+                    status: true,
+                    msg: 'Vehicle details added successfully.'
+                };
             }
         } catch (error) {
             throw error;

@@ -9,7 +9,9 @@ import { LoginService } from './login.service';
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
-  constructor(private formBuilder: FormBuilder,
+
+  constructor(
+    private formBuilder: FormBuilder,
     private loginService: LoginService,
     private router: Router
   ) { }

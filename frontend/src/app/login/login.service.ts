@@ -26,9 +26,12 @@ export class LoginService {
             .toPromise()
             .then((data: any) => {
                 console.log("RESP DAATA", data)
+
                 return data;
             }).catch((error) => {
+                alert("Invalid Crediantials");
                 throw error;
+
             })
     }
 
